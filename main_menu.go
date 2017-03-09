@@ -22,34 +22,23 @@ func (g *mainMenu) Setup(world *ecs.World) {
 	world.AddSystem(&common.MouseSystem{})
 	world.AddSystem(&ui.ActionSystem{})
 
-	startButton := *newButton(
+	startButton := newButton(
 		func() {
 			fmt.Println("Start new game")
 			engo.SetSceneByName(sceneGame, false)
 		})
-	b1 := *newButton(func() {
+	b1 := newButton(func() {
 		fmt.Println("b1")
 	})
-	b2 := *newButton(func() {
+	b2 := newButton(func() {
 		fmt.Println("b2")
 	})
 
-	m := ui.Menu{}
-	m.SpaceComponent = &common.SpaceComponent{
-		Position: engo.Point{X: 0, Y: 0},
-		Height:   100,
-		Width:    200,
-	}
-	m.Center(engo.Point{
-		X: 400,
-		Y: 320,
-	})
-	m.Add(&startButton)
-	m.Add(&b1)
-	m.Add(&b2)
-	m.Build()
+	buttons := []*ui.Button{startButton, b1, b2}
 
-	for _, ele := range []ui.Button{startButton, b1, b2} {
+	buildMainMenu(buttons)
+
+	for _, ele := range buttons {
 		for _, s := range world.Systems() {
 			switch sys := s.(type) {
 			case *common.RenderSystem:
@@ -62,6 +51,24 @@ func (g *mainMenu) Setup(world *ecs.World) {
 		}
 
 	}
+
+}
+
+func buildMainMenu(buttons []*ui.Button) {
+	m := ui.Menu{}
+	m.SpaceComponent = &common.SpaceComponent{
+		Position: engo.Point{X: 0, Y: 0},
+		Height:   100,
+		Width:    200,
+	}
+	m.Center(engo.Point{
+		X: 400,
+		Y: 320,
+	})
+	for _, b := range buttons {
+		m.Add(b)
+	}
+	m.Build()
 
 }
 
