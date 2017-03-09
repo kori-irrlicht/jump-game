@@ -16,6 +16,11 @@ type Button struct {
 	*ActionComponent
 }
 
+// AddSpaceComponent implements Element interface
+func (b *Button) AddSpaceComponent(sc *common.SpaceComponent) {
+	b.SpaceComponent = sc
+}
+
 // ActionComponent contains an action to be executed
 type ActionComponent struct {
 	Action func()

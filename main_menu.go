@@ -22,13 +22,52 @@ func (g *mainMenu) Setup(world *ecs.World) {
 	world.AddSystem(&common.MouseSystem{})
 	world.AddSystem(&ui.ActionSystem{})
 
+	startButton := *newButton(
+		func() {
+			fmt.Println("Start new game")
+			engo.SetSceneByName(sceneGame, false)
+		})
+	b1 := *newButton(func() {
+		fmt.Println("b1")
+	})
+	b2 := *newButton(func() {
+		fmt.Println("b2")
+	})
+
+	m := ui.Menu{}
+	m.SpaceComponent = &common.SpaceComponent{
+		Position: engo.Point{X: 0, Y: 0},
+		Height:   100,
+		Width:    200,
+	}
+	m.Center(engo.Point{
+		X: 400,
+		Y: 320,
+	})
+	m.Add(&startButton)
+	m.Add(&b1)
+	m.Add(&b2)
+	m.Build()
+
+	for _, ele := range []ui.Button{startButton, b1, b2} {
+		for _, s := range world.Systems() {
+			switch sys := s.(type) {
+			case *common.RenderSystem:
+				sys.Add(ele.BasicEntity, ele.RenderComponent, ele.SpaceComponent)
+			case *common.MouseSystem:
+				sys.Add(ele.BasicEntity, ele.MouseComponent, ele.SpaceComponent, ele.RenderComponent)
+			case *ui.ActionSystem:
+				sys.Add(ele.BasicEntity, ele.ActionComponent, ele.MouseComponent)
+			}
+		}
+
+	}
+
+}
+
+func newButton(action func()) *ui.Button {
 	e := ecs.NewBasic()
 	startButton := ui.Button{BasicEntity: &e}
-	startButton.SpaceComponent = &common.SpaceComponent{
-		Position: engo.Point{X: 200, Y: 200},
-		Width:    200,
-		Height:   100,
-	}
 	startButton.RenderComponent = &common.RenderComponent{
 		Drawable: common.Rectangle{
 			BorderWidth: 1.,
@@ -39,20 +78,8 @@ func (g *mainMenu) Setup(world *ecs.World) {
 	startButton.MouseComponent = &common.MouseComponent{}
 
 	startButton.ActionComponent = &ui.ActionComponent{}
-	startButton.Action = func() {
-		fmt.Println("Start new game")
-		engo.SetSceneByName(sceneGame, false)
-	}
+	startButton.Action = action
 
-	for _, s := range world.Systems() {
-		switch sys := s.(type) {
-		case *common.RenderSystem:
-			sys.Add(startButton.BasicEntity, startButton.RenderComponent, startButton.SpaceComponent)
-		case *common.MouseSystem:
-			sys.Add(startButton.BasicEntity, startButton.MouseComponent, startButton.SpaceComponent, startButton.RenderComponent)
-		case *ui.ActionSystem:
-			sys.Add(startButton.BasicEntity, startButton.ActionComponent, startButton.MouseComponent)
-		}
-	}
+	return &startButton
 
 }
