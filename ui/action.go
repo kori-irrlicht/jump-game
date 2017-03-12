@@ -7,25 +7,6 @@ import (
 	"engo.io/engo/common"
 )
 
-// Button is a clickable Element, which performs an action when clicked
-type Button struct {
-	*ecs.BasicEntity
-	*common.MouseComponent
-	*common.SpaceComponent
-	*common.RenderComponent
-	*ActionComponent
-}
-
-// AddSpaceComponent implements Element interface
-func (b *Button) AddSpaceComponent(sc *common.SpaceComponent) {
-	b.SpaceComponent = sc
-}
-
-// ActionComponent contains an action to be executed
-type ActionComponent struct {
-	Action func()
-}
-
 type actionEntity struct {
 	*ecs.BasicEntity
 	*common.MouseComponent
@@ -58,4 +39,9 @@ func (a *ActionSystem) New(*ecs.World) {
 // Add adds a new Button to the system
 func (a *ActionSystem) Add(basic *ecs.BasicEntity, action *ActionComponent, mouse *common.MouseComponent) {
 	a.entities = append(a.entities, actionEntity{basic, mouse, action})
+}
+
+// ActionComponent contains an action to be executed
+type ActionComponent struct {
+	Action func()
 }

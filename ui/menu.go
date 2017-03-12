@@ -42,3 +42,12 @@ func (m *Menu) Build() {
 	}
 
 }
+
+type Button interface {
+	Text() string
+	Action()
+}
+
+func BuildMenu(buttons []Button) (menu Menu) {
+	return
+}
