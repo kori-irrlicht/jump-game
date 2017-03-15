@@ -38,7 +38,13 @@ func buildMainMenu() *ui.Menu {
 		{
 			Text: "Hallo",
 			Action: func() {
-				fmt.Println("test")
+				fmt.Println("Hallo")
+			},
+		},
+		{
+			Text: "Welt",
+			Action: func() {
+				fmt.Println("Welt")
 			},
 		},
 	}
