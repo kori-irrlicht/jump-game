@@ -40,6 +40,7 @@ func (m *Menu) positionEntries() {
 				Y: m.Position.Y + float32(i)*part,
 			},
 		}
+		m.buttons[i].SpaceComponent = scBorder
 		m.buttons[i].parts[0].SpaceComponent = scBorder
 
 		text := m.buttons[i].parts[1].RenderComponent.Drawable.(common.Text)
