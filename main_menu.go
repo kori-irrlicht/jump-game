@@ -36,15 +36,15 @@ func (g *mainMenu) Setup(world *ecs.World) {
 func buildMainMenu() *ui.Menu {
 	buttons := []ui.Button{
 		{
-			Text: "Hallo",
+			Text: "Start",
 			Action: func() {
-				fmt.Println("Hallo")
+				engo.SetSceneByName(sceneGame, true)
 			},
 		},
 		{
-			Text: "Welt",
+			Text: "Quit",
 			Action: func() {
-				fmt.Println("Welt")
+				engo.Exit()
 			},
 		},
 	}
